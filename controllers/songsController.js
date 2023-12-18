@@ -1,4 +1,20 @@
 import fs from "fs";
+import path  from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
+
+const getIndex = (req, res) => {
+  try {
+    res.sendFile(path.join(__dirname, '../index.html'));
+  } catch (error) {
+    res.status(500).json({ error: "Error al procesar la solicitud" });
+    console.error("Error al procesar la solicitud:", error);
+  }
+};
 
 const getAllSongs = (req, res) => {
     try {
@@ -60,4 +76,4 @@ const getAllSongs = (req, res) => {
     }
   }
 
-  export { getAllSongs, addNewSong, editSong, deleteSong };
+  export { getAllSongs, addNewSong, editSong, deleteSong, getIndex };
