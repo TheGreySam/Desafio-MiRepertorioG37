@@ -27,5 +27,37 @@ const getAllSongs = (req, res) => {
     }
   }
 
+  const editSong = (req, res) => {
+    try {
+        const { id } = req.params
 
-  export { getAllSongs, addNewSong };
+        
+        const cancion = req.body;
+        const canciones = JSON.parse(fs.readFileSync('repertorio.json','utf8'));
+        const index = canciones.findIndex(p => p.id == id)
+        canciones[index] = cancion
+        fs.writeFileSync('repertorio.json', JSON.stringify(canciones));
+        res.status(202).send("Cancion editada");
+        
+    } catch (error) {
+        res.status(500).json({ error: "Error al procesar la solicitud" });
+        console.error("Error al procesar la solicitud:", error);
+    }
+  }
+
+  const deleteSong = (req, res) => {
+    try {
+        const { id } = req.params
+        const canciones = JSON.parse(fs.readFileSync('repertorio.json','utf8'));
+        const index = canciones.findIndex(p => p.id == id)
+        canciones.splice(index, 1)
+        fs.writeFileSync('repertorio.json', JSON.stringify(canciones));
+        res.status(203).send("Cancion eliminada");
+        
+    } catch (error) {
+        res.status(500).json({ error: "Error al procesar la solicitud" });
+        console.error("Error al procesar la solicitud:", error);
+    }
+  }
+
+  export { getAllSongs, addNewSong, editSong, deleteSong };
